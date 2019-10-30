@@ -6,11 +6,9 @@ import (
 	"net/http"
 )
 
-//Function to parse or generate settings.json
-func settings() {}
-
 func handler(w http.ResponseWriter, req *http.Request) {
 
+	//HTML Template
 	const tpl = `<!DOCTYPE html>
               <html>
               <head>
@@ -24,11 +22,13 @@ func handler(w http.ResponseWriter, req *http.Request) {
                     <div class="container">
                       <div class="navbar-header">
                             {{range .Menu}}<a class="navbar-brand" href="/{{ . }}">{{ . }}</a>{{else}}<div><strong>Data Missing</strong></div>{{end}}
-                      </div>
+					  </div>
+					  <div>
                     </div>
                   </nav>
                 </body>
-              </html>`
+			  </html>`
+
 	//Function to check for errors
 	check := func(err error) {
 		if err != nil {
@@ -43,12 +43,13 @@ func handler(w http.ResponseWriter, req *http.Request) {
 	data := struct {
 		Title string
 		Menu  []string
+		Body  []string
 	}{
 		Title: "Go http example",
 		Menu: []string{
-			"Link",
-			"Link",
-			"Link",
+			"Home",
+			"Mission",
+			"About",
 		},
 	}
 
@@ -61,8 +62,7 @@ func main() {
 
 	http.HandleFunc("/", handler)
 
-	// One can use generate_cert.go in crypto/tls to generate cert.pem and key.pem.
-	log.Printf("About to listen on 8. Go to http://127.0.0.1:80/")
+	log.Printf("About to listen on port 80. Go to http://127.0.0.1:80/")
 	err := http.ListenAndServe(":80", nil)
 	log.Fatal(err)
 }
